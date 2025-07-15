@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  users:
+    build: ./users-service
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+
+  orders:
+    build: ./orders-service
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: companydb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  cache:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+volumes:
+  db-data:
+
+networks:
+  backend:
+
